@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import CartCard from "./components/CartCard"
-import ProductCard from "./partials/ProductCard"
 import { axiosGET } from "../../hooks/axiosMethods";
 import { useAtom } from "jotai";
 import { atomToken } from "../../hooks/atomState";
