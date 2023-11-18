@@ -5,6 +5,6 @@ import auth from '../middleware/auth.js';
 import getProducts from '../controllers/products/getProducts.js';
 
 //routes
-router.get('/', getProducts);
+router.get('/', auth(), getProducts);
 
 export default router;

@@ -7,7 +7,7 @@ export const productsJSON = [
     {
         "title": "Smartphone",
         "image": "https://example.com/smartphone.jpg",
-        "description": "A high-performance smartphone with a sleek design, advanced camera features, and long-lasting battery life.",
+        "description": "A high-performance smartphone with a sleek design, advanced camera features, and long-lasting battery life perfect for productivity.",
         "price": 499.99
     },
     {
