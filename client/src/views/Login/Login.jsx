@@ -3,29 +3,60 @@ import Input from "../../compoents/Input"
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { axiosPOST } from "../../hooks/axiosMethods";
+import { useAtom } from "jotai";
+import { atomIsAuthenticate, atomToken, atomUser } from "../../hooks/atomState";
+import { useNavigate } from "react-router-dom";
+import { setOnLocalStorage } from "../../hooks/helpers";
 
-export const loginSchema = Yup.object().shape({
+const loginSchema = Yup.object().shape({
     password: Yup.string().required("Username is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
 });
 
 const Login = () => {
 
+    // global
+    const navigate = useNavigate();
+
     // hooks
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema),
         defaultValues: {
-            email: '',
-            password: ''
+            email: 'soumik@gmail.com',
+            password: 'abcabc'
         },
     });
 
     // states
+    const [token, setToken] = useAtom(atomToken);
+    const [loading, setLoading] = useState(false);
+    const [isAuthenticate, setIsAuthenticate] = useAtom(atomIsAuthenticate);
+    const [user, setUser] = useAtom(atomUser);
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleLogin = (getData) => {
-        console.log(getData);
+    // if token redirect
+    useEffect(() => {
+        if (isAuthenticate && token && user) {
+            navigate('/')
+        }
+    }, [navigate, isAuthenticate, token, user])
+
+    // login action
+    const handleLogin = async (getData) => {
+
+        // getting data
+        const getPOST = await axiosPOST('/auth/signin', getData, setLoading);
+
+        // if success
+        if (getPOST.success) {
+            setToken(getPOST.data.accessToken);
+            setUser(getPOST.data.user);
+            setIsAuthenticate(true);
+
+            setOnLocalStorage('token', getPOST.data.accessToken);
+        }
     }
 
     return (
@@ -87,6 +118,8 @@ const Login = () => {
                                     <Button
                                         text='Login'
                                         css='w-full'
+                                        isLoading={loading}
+                                        loadingText='Loging in'
                                     />
                                 </div>
 

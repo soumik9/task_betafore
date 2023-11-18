@@ -17,7 +17,7 @@ const signup = catchAsync(
         sendResponse(res, {
             statusCode: httpStatus.OK,
             success: true,
-            message: `User (${data.name}) created successfully!`,
+            message: `User created successfully!`,
         });
     }
 )
