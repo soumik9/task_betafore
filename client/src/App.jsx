@@ -6,6 +6,7 @@ import RequireAuth from './compoents/RequiredAuth';
 import Checkout from './views/Checkout/Checkout';
 import CheckoutSuccess from './views/CheckoutResult/CheckoutSuccess';
 import CheckoutCancel from './views/CheckoutResult/CheckoutCancel';
+import Layoout from './compoents/Layoout';
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
 
       {/* home page */}
       <Route path="/" element={<RequireAuth>
-        <Home />
+        <Layoout> <Home /> </Layoout>
       </RequireAuth>} />
 
       {/* checkout page */}

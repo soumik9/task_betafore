@@ -5,7 +5,6 @@ import { useAtom } from "jotai";
 import { atomToken } from "../../hooks/atomState";
 import Products from "./components/Products";
 
-
 const Home = () => {
 
     // states
@@ -23,7 +22,7 @@ const Home = () => {
     }, [token])
 
     return (
-        <main className="bg-gray-200 py-32">
+        <main className="bg-gray-200 pb-32 pt-6">
             <div className="container">
 
                 <div className="grid md:grid-cols-3 xll:grid-cols-4 lg:gap-5 md:gap-2">
