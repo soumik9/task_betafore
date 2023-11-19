@@ -41,7 +41,7 @@ const Input = ({ label, id, type = 'text', icon, labelRequired, error, inputCss,
         </span>
       )}
 
-      {passwordToggle && <div className="absolute top-[2.6rem] right-3.5">
+      {passwordToggle && <div className="absolute top-[3rem] right-3.5">
         {showPassword ? <>
           <AiOutlineEye
             className="text-gray-500 text-[22px] cursor-pointer hover:text-gray-600 trans"

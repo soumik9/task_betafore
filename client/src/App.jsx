@@ -15,6 +15,7 @@ import { useAtom } from 'jotai';
 import { atomIsAuthenticate, atomToken, atomUser } from './hooks/atomState';
 import { removeFromLocalStorage } from './hooks/helpers';
 import toast from 'react-hot-toast';
+import Signup from './views/Signup/Signup';
 
 function App() {
 
@@ -86,6 +87,7 @@ function App() {
         <CheckoutCancel />
       </RequireAuth>} />
 
+      <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
     </Routes>
   )
