@@ -24,7 +24,6 @@ export default function useAuthCheck() {
     if (authChecked) return;
 
     const accessToken = getFromLocalStorage("token");
-    // const _id = Cookies.get("_id");
     const headers = { Authorization: `Bearer ${accessToken}` };
 
     if (accessToken) {
