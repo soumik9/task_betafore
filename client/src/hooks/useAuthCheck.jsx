@@ -1,33 +1,51 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
-import {
-  userLoggedIn,
-  userLoggedOut,
-} from "../redux-rtk/features/auth/authSlice";
-import decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { loginUrl } from "../configs/constants";
+import { atomIsAuthenticate, atomToken, atomUser } from "./atomState";
+import { useAtom } from "jotai";
+import { getFromLocalStorage, removeFromLocalStorage } from "./helpers";
+
 
 export default function useAuthCheck() {
+
+  // global
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  // states
   const [authChecked, setAuthChecked] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+
+  const [token, setToken] = useAtom(atomToken);
+  const [isAuthenticate, setIsAuthenticate] = useAtom(atomIsAuthenticate);
+  const [user, setUser] = useAtom(atomUser);
 
   useEffect(() => {
     if (authChecked) return;
 
-    const accessToken = Cookies.get("accessToken");
-    const _id = Cookies.get("_id");
+    const accessToken = getFromLocalStorage("token");
+    // const _id = Cookies.get("_id");
     const headers = { Authorization: `Bearer ${accessToken}` };
 
-    if (accessToken && _id) {
-      const decodedToken = decode(accessToken);
+    if (accessToken) {
+      const decodedToken = jwtDecode(accessToken);
 
       if (decodedToken.exp * 1000 < new Date().getTime()) {
-        dispatch(userLoggedOut());
-        navigate(loginUrl);
+
+        // atom sates
+        setToken('');
+        setIsAuthenticate(false);
+        setUser(null);
+
+        // local states
+        setAuthChecked(true);
+        setAuthenticated(true);
+
+        // remove from storage
+        removeFromLocalStorage('token');
+
+        // navigate
+        navigate('/login');
       } else {
         // Check if already authenticated
         if (!authenticated) {
@@ -35,33 +53,39 @@ export default function useAuthCheck() {
           fetch(`${import.meta.env.VITE_BACKEND_URL}auth/profile`, { headers })
             .then((response) => response.json())
             .then((data) => {
-              dispatch(
-                userLoggedIn({
-                  accessToken: accessToken,
-                  isAuthenticated: true,
-                  _id: _id,
-                  user: data.data,
-                })
-              );
-              setAuthenticated(true); // Mark as authenticated
+
+              // set atom sates
+              setUser(data.data);
+              setIsAuthenticate(true);
+              setToken(accessToken);
+
+              // states which Mark as authenticated
+              setAuthenticated(true);
             })
             .catch((error) => {
               console.error(error);
-              dispatch(userLoggedOut());
-              navigate(loginUrl);
+
+              // set atom sates
+              setToken('');
+              setIsAuthenticate(false);
+              setUser(null);
+
+              // remove from storage
+              removeFromLocalStorage('token');
+              navigate('/login');
             });
         }
         setAuthChecked(true);
       }
     } else {
-      navigate(loginUrl);
+      navigate('/login');
       setAuthChecked(true);
       setAuthenticated(true);
     }
 
-    // Set authChecked to true after processing
     setAuthChecked(true);
-  }, [dispatch, navigate, authChecked, authenticated]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate, authChecked, authenticated]);
 
-  return authenticated; // Return the authenticated state
+  return authenticated;
 }

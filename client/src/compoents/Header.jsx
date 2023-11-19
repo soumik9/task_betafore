@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useAtom } from "jotai";
 import { Link } from "react-router-dom"
 import { atomIsAuthenticate, atomToken, atomUser } from "../hooks/atomState";

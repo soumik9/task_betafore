@@ -7,8 +7,13 @@ import Checkout from './views/Checkout/Checkout';
 import CheckoutSuccess from './views/CheckoutResult/CheckoutSuccess';
 import CheckoutCancel from './views/CheckoutResult/CheckoutCancel';
 import Layoout from './compoents/Layoout';
+import useAuthCheck from './hooks/useAuthCheck';
 
 function App() {
+
+  // authentication checking
+  const authChecked = useAuthCheck();
+  if (!authChecked) return <div className='text-center'>Checking authentication....</div>
 
   return (
     <Routes>
