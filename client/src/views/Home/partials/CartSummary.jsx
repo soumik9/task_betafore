@@ -1,17 +1,23 @@
 import Button from '../../../compoents/Button'
 import { loadStripe } from '@stripe/stripe-js';
 import { axiosPOST } from '../../../hooks/axiosMethods';
-import { atomToken, atomUser } from '../../../hooks/atomState';
+import { atomCartItems, atomToken, atomUser } from '../../../hooks/atomState';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-const CartSummary = ({ total, cartItems }) => {
+const CartSummary = () => {
 
     // sattes
     const [user] = useAtom(atomUser);
     const [token] = useAtom(atomToken);
     const [loading, setLoading] = useState(false);
+    const [cartItems, setCartItems] = useAtom(atomCartItems);
+
+    // Using reduce to get the total
+    const total = cartItems.reduce((prev, currentValue) => {
+        return prev + currentValue.price;
+    }, 0);
 
     // handle checkout
     const handleCheckout = async () => {
@@ -20,17 +26,20 @@ const CartSummary = ({ total, cartItems }) => {
         const body = {
             products: cartItems,
             user: user._id,
+            total,
         }
 
         // getting data
         const getPOST = await axiosPOST('checkout/session', body, setLoading, token);
 
-        console.log(getPOST, 'check');
-
         const sessionID = getPOST.data.id
         const result = stripe.redirectToCheckout({
             sessionId: sessionID
         })
+
+        if (sessionID) {
+            setCartItems([])
+        }
 
         if (result.error) {
             toast.error('Error on session!')

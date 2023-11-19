@@ -8,11 +8,6 @@ const CartCard = () => {
     // states
     const [cartItems, setCartItems] = useAtom(atomCartItems);
 
-    // Using reduce to get the total
-    const total = cartItems.reduce((prev, currentValue) => {
-        return prev + currentValue.price;
-    }, 0);
-
     // remove from cart
     const hanldeRemoveCartItem = (id) => {
         Swal.fire({
@@ -73,11 +68,7 @@ const CartCard = () => {
                     </div>)}
                 </>
 
-
-                <CartSummary
-                    total={total}
-                    cartItems={cartItems}
-                />
+                <CartSummary />
 
             </div>
         </div >

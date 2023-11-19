@@ -47,7 +47,7 @@ const Login = () => {
     const handleLogin = async (getData) => {
 
         // getting data
-        const getPOST = await axiosPOST('/auth/signin', getData, setLoading);
+        const getPOST = await axiosPOST('auth/signin', getData, setLoading);
 
         // if success
         if (getPOST.success) {

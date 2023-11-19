@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 
 const orderSchema = new Schema({
     user: {
@@ -18,7 +18,6 @@ const orderSchema = new Schema({
     },
     stripeId: {
         type: String,
-        required: [true, 'String field is required']
     },
     status: {
         type: String,
@@ -26,5 +25,5 @@ const orderSchema = new Schema({
     },
 }, { timestamps: true });
 
-const Product = model("order", orderSchema);
-export default Product;
+const Order = model("Order", orderSchema);
+export default Order;

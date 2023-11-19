@@ -3,23 +3,29 @@ import sendResponse from '../../../utils/helpers/SendResponse.js';
 import catchAsync from "../../../utils/helpers/catchAsync.js";
 import config from '../../../utils/server/config.js';
 import stripe from 'stripe';
+import Order from '../../models/orderSchema.js';
 const stripeInstance = stripe(String(config.STRIPE_SECRET_KEY));
 
 const CreateCheckoutSession = catchAsync(
     async (req, res) => {
 
-        const { products, user } = req.body;
+        const { products, user, total } = req.body;
 
-        // console.log(products);
-        // console.log(user);
+        let productsIDs = [];
 
+        // getting all products id
+        products.map(({ _id }) => {
+            productsIDs.push(_id)
+        })
+
+        // setting line items
         const lineItems = products.map((product) => ({
             price_data: {
                 currency: "bdt",
                 product_data: {
                     name: product.title,
                 },
-                unit_amount: product.price * 100
+                unit_amount: Math.round(product.price * 100)
             },
             quantity: 1
         }))
@@ -32,7 +38,20 @@ const CreateCheckoutSession = catchAsync(
             cancel_url: `${config.CLIENT_URL}checkout/cancel`,
         })
 
-        console.log(session);
+
+        // session done then store in db
+        if (session.id) {
+
+            // data
+            const data = {
+                user,
+                products: productsIDs,
+                total,
+            }
+
+            // saving data
+            await Order.create(req.body);
+        }
 
         sendResponse(res, {
             statusCode: httpStatus.OK,
