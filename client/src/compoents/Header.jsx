@@ -27,7 +27,11 @@ const Header = () => {
     return (
         <header className="bg-primary py-2 text-white sticky top-0 z-10">
             <div className="container flex items-center justify-between">
-                <h1 className="text-2xl font-bold">E-Pay</h1>
+
+                <Link to='/'>
+                    <h1 className="text-2xl font-bold">E-Pay</h1>
+                </Link>
+
                 <nav className=" flex gap-5">
 
                     <Link
