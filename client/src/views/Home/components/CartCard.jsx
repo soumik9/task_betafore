@@ -1,11 +1,17 @@
 import { useAtom } from "jotai";
 import { atomCartItems } from "../../../hooks/atomState";
 import Swal from 'sweetalert2'
+import CartSummary from "../partials/CartSummary";
 
 const CartCard = () => {
 
     // states
     const [cartItems, setCartItems] = useAtom(atomCartItems);
+
+    // Using reduce to get the total
+    const total = cartItems.reduce((prev, currentValue) => {
+        return prev + currentValue.price;
+    }, 0);
 
     // remove from cart
     const hanldeRemoveCartItem = (id) => {
@@ -19,7 +25,7 @@ const CartCard = () => {
             confirmButtonText: "Yes, Remove it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                setCartItems(cartItems.filter((item) => item.id !== id));
+                setCartItems(cartItems.filter((item) => item._id !== id));
                 Swal.fire({
                     title: "Removed!",
                     text: "Your file has been removed.",
@@ -59,13 +65,19 @@ const CartCard = () => {
                             <button
                                 type="button"
                                 className="font-semibold hover:text-red-500 trans text-gray-500 text-xs"
-                                onClick={() => hanldeRemoveCartItem(item.id)}
+                                onClick={() => hanldeRemoveCartItem(item._id)}
                             >
                                 Remove
                             </button>
                         </div>
                     </div>)}
                 </>
+
+
+                <CartSummary
+                    total={total}
+                    cartItems={cartItems}
+                />
 
             </div>
         </div >

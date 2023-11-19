@@ -5,17 +5,17 @@ import validator from "validator";
 const userSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'Name filed is required']
+        required: [true, 'Name field is required']
     },
     email: {
         type: String,
-        required: [true, 'Email filed is required'],
+        required: [true, 'Email field is required'],
         unique: true,
         validate: [validator.isEmail, 'Please provide a valid email.'],
     },
     password: {
         type: String,
-        required: [true, 'Password filed is required'],
+        required: [true, 'Password field is required'],
     },
 }, { timestamps: true });
 

@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 
 const ProductCard = (data) => {
     // destructuring
-    const { id, title, description, price } = data.data;
+    const { _id, title, description, price } = data.data;
 
     // states
     const [isAuthenticate] = useAtom(atomIsAuthenticate);
@@ -24,7 +24,7 @@ const ProductCard = (data) => {
         }
 
         // if the item is already added
-        if (cartItems.find((item) => item.id === data.id)) {
+        if (cartItems.find((item) => item._id === data._id)) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -55,7 +55,7 @@ const ProductCard = (data) => {
                 <div className="flex gap-2 justify-end ">
                     <Button
                         text='Add to Cart'
-                        disabled={!isAuthenticate || cartItems.find((item) => item.id === id)}
+                        disabled={!isAuthenticate || cartItems.find((item) => item._id === _id)}
                         onClick={() => handleAddCartItem(data.data)}
                         type='button'
                         css='w-[160px]'

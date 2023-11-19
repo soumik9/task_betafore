@@ -24,10 +24,14 @@ export const axiosGET = async (url, setLoad, token) => {
 }
 
 // post method
-export const axiosPOST = async (url, data, setLoad) => {
+export const axiosPOST = async (url, data, setLoad, token) => {
     setLoad(true);
     try {
-        const response = await axios.post(`${mainUrl}${url}`, data);
+        const response = await axios.post(`${mainUrl}${url}`, data, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         setLoad(false);
         return response.data;
     } catch (error) {
