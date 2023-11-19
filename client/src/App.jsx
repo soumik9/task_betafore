@@ -16,6 +16,7 @@ import { atomIsAuthenticate, atomToken, atomUser } from './hooks/atomState';
 import { removeFromLocalStorage } from './hooks/helpers';
 import toast from 'react-hot-toast';
 import Signup from './views/Signup/Signup';
+import MyOrders from './views/MyOrders/MyOrders';
 
 function App() {
 
@@ -72,6 +73,11 @@ function App() {
       {/* home page */}
       <Route path="/" element={<RequireAuth>
         <Layoout> <Home /> </Layoout>
+      </RequireAuth>} />
+
+      {/* my orders page */}
+      <Route path="/my-orders" element={<RequireAuth>
+        <Layoout> <MyOrders /> </Layoout>
       </RequireAuth>} />
 
       {/* checkout page */}

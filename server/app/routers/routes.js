@@ -4,6 +4,7 @@ const router = express.Router();
 import authRouter from './authRouter.js'
 import productRouter from './productRouter.js'
 import checkoutRouter from './checkoutRouter.js'
+import orderRouter from './orderRouter.js'
 
 const apiRoutes = [
     {
@@ -17,6 +18,10 @@ const apiRoutes = [
     {
         path: '/checkout',
         route: checkoutRouter,
+    },
+    {
+        path: '/order',
+        route: orderRouter,
     },
 ];
 
